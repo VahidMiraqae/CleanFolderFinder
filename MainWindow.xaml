@@ -1,0 +1,80 @@
+<Window x:Class="CleanFolderFinder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Clean Folder Finder" Height="640" Width="960">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Root folder selection -->
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Root folder:" VerticalAlignment="Center" Margin="0,0,6,0" />
+            <ComboBox Grid.Column="1" x:Name="RootPathBox" IsEditable="True" VerticalAlignment="Center" />
+            <Button Grid.Column="2" Content="Browse..." Padding="10,2" Margin="6,0,0,0" Click="Browse_Click" />
+            <Button Grid.Column="3" Content="Scan" Padding="14,2" Margin="6,0,0,0" Click="Scan_Click" />
+        </Grid>
+
+        <!-- Bulk actions -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,8,0,8">
+            <Button Content="Select All" Padding="10,2" Click="SelectAll_Click" />
+            <Button Content="Deselect All" Padding="10,2" Margin="6,0,0,0" Click="DeselectAll_Click" />
+            <Button Content="Delete Selected" Padding="10,2" Margin="6,0,0,0" Click="DeleteSelected_Click" />
+            <TextBlock x:Name="SelectionInfo" VerticalAlignment="Center" Margin="12,0,0,0" Foreground="#555" />
+        </StackPanel>
+
+        <!-- Statistics -->
+        <Border Grid.Row="2" BorderBrush="#DDD" BorderThickness="1" CornerRadius="3" Padding="8,4" Margin="0,0,0,8" Background="#FAFAFA">
+            <TextBlock x:Name="StatsText" Text="No scan yet." TextWrapping="Wrap" />
+        </Border>
+
+        <!-- Results -->
+        <ListView Grid.Row="3" x:Name="ResultsList" SelectionMode="Single">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Width="40">
+                        <GridViewColumn.Header>
+                            <CheckBox x:Name="HeaderCheckBox" Click="HeaderCheckBox_Click" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Type" Width="60" DisplayMemberBinding="{Binding Kind}" />
+                    <GridViewColumn Header="Size" Width="90" DisplayMemberBinding="{Binding SizeDisplay}" />
+                    <GridViewColumn Header="Path" Width="600" DisplayMemberBinding="{Binding Path}" />
+                    <GridViewColumn Width="80">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Content="Delete" Padding="8,1" Click="DeleteOne_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
+
+        <!-- Progress -->
+        <ProgressBar Grid.Row="4" x:Name="Progress" Height="16" Margin="0,8,0,0" />
+
+        <!-- Status -->
+        <StatusBar Grid.Row="5" Margin="0,4,0,0">
+            <TextBlock x:Name="StatusText" Text="Ready." />
+        </StatusBar>
+    </Grid>
+</Window>
